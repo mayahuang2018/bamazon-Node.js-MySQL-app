@@ -1,0 +1,24 @@
+{
+  "name": "bamazon-node.js-mysql-app",
+  "version": "1.0.0",
+  "description": "bamazon node.js-msql app",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mayahuang2018/bamazon-Node.js-MySQL-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mayahuang2018/bamazon-Node.js-MySQL-app/issues"
+  },
+  "homepage": "https://github.com/mayahuang2018/bamazon-Node.js-MySQL-app#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^6.3.1",
+    "mysql": "^2.17.1"
+  }
+}
