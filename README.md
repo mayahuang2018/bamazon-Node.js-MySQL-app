@@ -29,12 +29,13 @@ This is an Amazon-like storefront with MySQL skills I learned in Gatech Coding b
 ### If not, 
      Bamazon will tell the user "Sorry, [the product] is out of stock!"
 
-### Three seconds later, the table of all available products will be display once more, the user can make a new choice.
+#### 3 seconds later, the table of all available products will be display once more, the user can make a new choice.
 
 
 ![image003_bamazon.js](Gifs/bamazon003.gif)
 
-### If the store does have enough products, Bamazon would show the total price that user should pay.
-### Then, the stock_quantity of that product changes.
+### If the store does have enough products, 
+     Bamazon would show the total price that user should pay.
+     Then, the stock_quantity of that product changes.
 
     
