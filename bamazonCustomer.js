@@ -16,7 +16,7 @@ connection.connect(function(err){
     {
         console.log(err);
     }
-    console.log("COnnected as id: "+connection.threadId);
+    console.log("Hello, you're the NO."+connection.threadId+" guest of Bamazon!");
     displayProducts();
 });
  
@@ -25,7 +25,6 @@ connection.connect(function(err){
   console.log('The solution is: ', results[0].solution);
   displayProducts();
 });*/
-
 
 // Running this application will first display all of the items available for sale.
 //  Include the ids, names, and prices of products for sale.
@@ -36,6 +35,11 @@ function displayProducts(){
     console.log("===========================================");
 
     connection.query("SELECT * FROM products", function(err,data){
+        if(err)
+        {
+            console.log(err);
+        }
+
         var table = new Table({
             head: ["ID","Item Name","Department Name","Price","Stock Quantity"]
         });
@@ -52,28 +56,65 @@ function displayProducts(){
     })
 }
 
-
 // The app should then prompt users with two messages.
-
-// The first should ask them the ID of the product they would like to buy.
-// The second message should ask how many units of the product they would like to buy.
-
 function palceOrder(){
+
     inquirer.prompt([{
+
+        // The first should ask them the ID of the product they would like to buy.
         name: "id",
-        type: "input",
-        message: "Please enter product ID you want to buy: "
+        type: "number",
+        message: "Please enter product ID you want to buy: ",
+        
     },{
+        // The second message should ask how many units of the product they would like to buy.
         name:"quantity",
-        type:"input",
-        message: "Please enter quantity:"
+        type:"number",
+        message: "How many units you would like to buy？",
+       
+
     }]).then(function(answer){
-        console.log(answer);
-    })
+        
+        var theItemID = answer.id;
+        var theItemQuantity = answer.quantity;
 
-    connection.end();
-}
+        purchaseOrder(theItemID,theItemQuantity);
 
+});
+};
 
+//Once the customer has placed the order, 
+//your application should check if your store has enough of the product to meet the customer's request.
 
+function purchaseOrder (ID,Q){
 
+        connection.query(
+            "SELECT * FROM products where item_id = " +ID,
+            function(err, res) {
+              if (err){console.log(err)};
+              //if your store does have enough of the product, you should fulfill the customer's order.
+              //This means updating the SQL database to reflect the remaining quantity.
+              //Once the update goes through, show the customer the total cost of their purchase.
+              if (Q <= res[0].stock_quantity){
+                  var totalCost = res[0].price * Q;
+                  console.log("Add to Cart! Total cost: "+totalCost);
+                  connection.query("UPDATE products SET stock_quantity=? WHERE item_id=?", [res[0].stock_quantity-Q, ID], function (err) {
+                    if (err) throw err;
+                  
+                  })
+
+                  connection.end(); 
+
+              }else{
+             //If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
+                console.log("Sorry, "+res[0].product_name+" is out of stock! ")
+                displayProducts();
+              }
+              
+             
+            }
+            
+         );
+           
+        
+        }
