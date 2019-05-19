@@ -19,12 +19,6 @@ connection.connect(function(err){
     console.log("Hello, you're the NO."+connection.threadId+" guest of Bamazon!");
     displayProducts();
 });
- 
-/*connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results[0].solution);
-  displayProducts();
-});*/
 
 // Running this application will first display all of the items available for sale.
 //  Include the ids, names, and prices of products for sale.
@@ -92,23 +86,28 @@ function purchaseOrder (ID,Q){
             "SELECT * FROM products where item_id = " +ID,
             function(err, res) {
               if (err){console.log(err)};
-              //if your store does have enough of the product, you should fulfill the customer's order.
-              //This means updating the SQL database to reflect the remaining quantity.
-              //Once the update goes through, show the customer the total cost of their purchase.
+
+              //if your store does have enough of the product, you should fulfill the customer's order.               
               if (Q <= res[0].stock_quantity){
+
+                  //Once the update goes through, show the customer the total cost of their purchase.
                   var totalCost = res[0].price * Q;
                   console.log("Add to Cart! Total cost: "+totalCost);
+
+                  // updating the SQL database to reflect the remaining quantity.
                   connection.query("UPDATE products SET stock_quantity=? WHERE item_id=?", [res[0].stock_quantity-Q, ID], function (err) {
                     if (err) throw err;
-                  
                   })
 
                   connection.end(); 
 
               }else{
-             //If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
+             //If not, the app should log a phrase like Insufficient quantity!
                 console.log("Sorry, "+res[0].product_name+" is out of stock! ")
-                displayProducts();
+
+                //and then(3s later) prevent the order from going through.
+                setTimeout(displayProducts, 3000)
+                
               }
               
              
